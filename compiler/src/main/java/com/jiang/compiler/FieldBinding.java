@@ -1,5 +1,9 @@
 package com.jiang.compiler;
 
+import com.squareup.javapoet.ClassName;
+import com.squareup.javapoet.ParameterizedTypeName;
+import com.squareup.javapoet.TypeName;
+
 import javax.lang.model.type.TypeMirror;
 
 /**
@@ -15,5 +19,14 @@ public class FieldBinding {
         this.fieldName = fieldName;
         this.typeMirror = typeMirror;
         this.id = id;
+    }
+
+
+    public ClassName getRawType() {
+        TypeName type = TypeName.get(typeMirror);
+        if (type instanceof ParameterizedTypeName) {
+            return ((ParameterizedTypeName) type).rawType;
+        }
+        return (ClassName) type;
     }
 }

@@ -49,6 +49,8 @@ public class ButterForkProcessor extends AbstractProcessor {
      */
     private Filer filer;
 
+    static final ClassName UTILS = ClassName.get("com.jiang.butterfork", "Utils");
+
     static final String VIEW_TYPE = "android.view.View";
     static final String ACTIVITY_TYPE = "android.app.Activity";
 
@@ -124,7 +126,11 @@ public class ButterForkProcessor extends AbstractProcessor {
                     .addParameter(activityClassName, "target")
                     .addParameter(viewClassName, "source")
                     .addStatement("this.target = target")
-                    .addStatement("target.button = source.findViewById($L)",entry.getValue().get(0).id)
+//                    .addStatement("target.button = source.findViewById($L)", entry.getValue().get(0).id)
+                    .addStatement("target.$L = $T.findViewAndCost(source,$L,$T.class)",
+                            entry.getValue().get(0).fieldName,
+                            UTILS, entry.getValue().get(0).id,
+                            entry.getValue().get(0).getRawType())
                     .addAnnotation(UiThread.class)
                     .build();
 
